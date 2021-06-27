@@ -181,10 +181,10 @@ Access          PUBLIC
 Parameters      NONE
 Method          POST
 */
-prakhar.post("/book/new" , (req,res) => {
-    const {newBook} = req.body;
+prakhar.post("/book/new", (req, res) => {
+    const { newBook } = req.body;
     database.books.push(newBook);
-    return res.json({books: database.books, message: "book was added"});
+    return res.json({ books: database.books, message: "book was added" });
 });
 
 /* 
@@ -194,10 +194,10 @@ Access          PUBLIC
 Parameters      NONE
 Method          POST
 */
-prakhar.post("/author/new" , (req,res) => {
-    const {newAuthor} = req.body;
+prakhar.post("/author/new", (req, res) => {
+    const { newAuthor } = req.body;
     database.authors.push(newAuthor);
-    return res.json({authors: database.authors, message: "author was added"});
+    return res.json({ authors: database.authors, message: "author was added" });
 });
 
 /* 
@@ -207,12 +207,90 @@ Access          PUBLIC
 Parameters      NONE
 Method          POST
 */
-prakhar.post("/pub/new" , (req,res) => {
-    const {newPublication} = req.body;
+prakhar.post("/pub/new", (req, res) => {
+    const { newPublication } = req.body;
     database.publications.push(newPublication);
-    return res.json({authors: database.publications, message: "publication was added"});
+    return res.json({ authors: database.publications, message: "publication was added" });
 });
 
 
-prakhar.listen(3200, () => console.log("Server is Running"));
 
+/* 
+Route           /books/update
+Description     update book title with isbn
+Access          PUBLIC
+Parameters      isbn
+Method          PUT
+*/
+prakhar.put("/books/update/:isbn", (req, res) => {
+    database.books.forEach((book) => {
+        if (book.ISBN === req.params.isbn) {
+            book.title = req.body.bookTitle;
+            return;
+        }
+    });
+
+    return res.json({ books: database.books })
+});
+
+/* 
+Route           /books/author/update
+Description     update/add new author
+Access          PUBLIC
+Parameters      isbn
+Method          PUT
+*/
+prakhar.put("/books/author/update/:isbn", (req, res) => {
+    // update the book data base
+    database.books.forEach((book) => {
+        if (book.ISBN === req.params.isbn) {
+            return book.authors.push(req.body.newAuthorId);
+        }
+    });
+
+    // update author database
+    database.authors.forEach((author) => {
+        if (author.id === req.body.newAuthorId) {
+            return author.books.push(req.params.isbn);
+        }
+    });
+    return res.json({ books: database.books, authors: database.authors, message: "new author was added" })
+});
+
+/* 
+Route           /author/update
+Description     update name with id
+Access          PUBLIC
+Parameters      id
+Method          PUT
+*/
+prakhar.put("/author/update/:id", (req, res) => {
+    database.authors.forEach((author) => {
+        if (author.id === parseInt(req.params.id)) {
+            author.name = req.body.authorName;
+            return;
+        }
+    });
+
+    return res.json({ authors: database.authors, message: "Author name updated" })
+});
+
+/* 
+Route           /pub/update
+Description     update name with isbn
+Access          PUBLIC
+Parameters      isbn
+Method          PUT
+*/
+prakhar.put("/pub/update/:isbn", (req, res) => {
+    database.publications.forEach((publication) => {
+        if (publication.books.includes(req.params.isbn)) {
+            publication.name = req.body.publicationName;
+            return;
+        }
+    });
+
+    return res.json({ publications: database.publications, 
+        message: "publication name updated" })
+});
+prakhar.listen(3200, () => console.log("Server is Running"));

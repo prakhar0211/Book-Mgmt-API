@@ -28,8 +28,8 @@
 // New Book                                                     ✔      /book/new
 
 // PUT
-// update book details
-// update/add new author
+// update book details                                    ✔      /books/update/:isbn
+// update/add new author                                  ✔      /books/author/update/:isbn
 
 // delete
 // delete a book 
@@ -51,7 +51,7 @@
 // NEW AUTHOR                                                   ✔      /author/new
 
 // PUT
-// AuTHOR details
+// AuTHOR details                                               ✔      /author/update/:id
 
 // DELETE
 // delete an author
@@ -72,7 +72,7 @@
 // ADD NEW PUB  LICATION                                        ✔      /pub/new
 
 // PUT
-// updsate publication details
+// updsate publication details                                  ✔      /pub/update/:isbn
 // update/add new book to the publication
 
 // DELETE
