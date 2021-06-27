@@ -174,6 +174,45 @@ prakhar.get("/pub/is/:isbn", (req, res) => {
     return res.json({ publications: getSpecificPublicationByisbn });
 });
 
+/* 
+Route           /book/new
+Description     add new books
+Access          PUBLIC
+Parameters      NONE
+Method          POST
+*/
+prakhar.post("/book/new" , (req,res) => {
+    const {newBook} = req.body;
+    database.books.push(newBook);
+    return res.json({books: database.books, message: "book was added"});
+});
+
+/* 
+Route           /author/new
+Description     add new author
+Access          PUBLIC
+Parameters      NONE
+Method          POST
+*/
+prakhar.post("/author/new" , (req,res) => {
+    const {newAuthor} = req.body;
+    database.authors.push(newAuthor);
+    return res.json({authors: database.authors, message: "author was added"});
+});
+
+/* 
+Route           /pub/new
+Description     add new publication
+Access          PUBLIC
+Parameters      NONE
+Method          POST
+*/
+prakhar.post("/pub/new" , (req,res) => {
+    const {newPublication} = req.body;
+    database.publications.push(newPublication);
+    return res.json({authors: database.publications, message: "publication was added"});
+});
+
 
 prakhar.listen(3200, () => console.log("Server is Running"));
 
