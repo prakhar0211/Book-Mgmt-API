@@ -4,10 +4,10 @@ const express = require("express");
 const database = require("./database/index");
 
 // Initializing express
-const prakhar = express();
+const BookHUB = express();
 
 // configurations
-prakhar.use(express.json());
+BookHUB.use(express.json());
 
 /* 
 Route           /
@@ -18,7 +18,7 @@ Method          GET
 */
 
 
-prakhar.get("/", (req, res) => {
+BookHUB.get("/", (req, res) => {
     return res.json({ books: database.books });
 });
 
@@ -30,7 +30,7 @@ Parameters      ISBN
 Method          GET
 */
 
-prakhar.get("/is/:isbn", (req, res) => {
+BookHUB.get("/is/:isbn", (req, res) => {
     const getSpecificBook = database.books.filter((book) => book.ISBN === req.params.isbn);
 
     if (getSpecificBook.length === 0) {
@@ -47,7 +47,7 @@ Access          PUBLIC
 Parameters      category
 Method          GET
 */
-prakhar.get("/c/:category", (req, res) => {
+BookHUB.get("/c/:category", (req, res) => {
     const getSpecificBooks = database.books.filter((book) =>
         book.category.includes(req.params.category));
 
@@ -65,7 +65,7 @@ Access          PUBLIC
 Parameters      author
 Method          GET
 */
-prakhar.get("/a/:author", (req, res) => {
+BookHUB.get("/a/:author", (req, res) => {
     const getSpecificBookAuthor = database.books.filter((book) =>
         book.authors.includes(parseInt(req.params.author)));
 
@@ -83,7 +83,7 @@ Access          PUBLIC
 Parameters      NONE
 Method          GET
 */
-prakhar.get("/author", (req, res) => {
+BookHUB.get("/author", (req, res) => {
     return res.json({ authors: database.authors });
 });
 
@@ -95,7 +95,7 @@ Parameters      name
 Method          GET
 */
 
-prakhar.get("/author/:name", (req, res) => {
+BookHUB.get("/author/:name", (req, res) => {
     const getSpecificBookByAuthorName = database.authors.filter((book) => book.name === req.params.name);
 
     if (getSpecificBookByAuthorName.length === 0) {
@@ -112,7 +112,7 @@ Access          PUBLIC
 Parameters      isbn
 Method          GET
 */
-prakhar.get("/author/is/:isbn", (req, res) => {
+BookHUB.get("/author/is/:isbn", (req, res) => {
     const getSpecificAuthors = database.authors.filter((author) =>
         author.books.includes(req.params.isbn));
 
@@ -130,7 +130,7 @@ Access          PUBLIC
 Parameters      NONE
 Method          GET
 */
-prakhar.get("/pub", (req, res) => {
+BookHUB.get("/pub", (req, res) => {
     return res.json({ publications: database.publications });
 });
 
@@ -142,7 +142,7 @@ Parameters      name
 Method          GET
 */
 
-prakhar.get("/pub/:name", (req, res) => {
+BookHUB.get("/pub/:name", (req, res) => {
     const getSpecificBooksByPublication = database.publications.filter((pubname) =>
         pubname.name === req.params.name);
 
@@ -163,7 +163,7 @@ Access          PUBLIC
 Parameters      isbn
 Method          GET
 */
-prakhar.get("/pub/is/:isbn", (req, res) => {
+BookHUB.get("/pub/is/:isbn", (req, res) => {
     const getSpecificPublicationByisbn = database.publications.filter((publications) =>
         publications.books.includes(req.params.isbn));
 
@@ -181,7 +181,7 @@ Access          PUBLIC
 Parameters      NONE
 Method          POST
 */
-prakhar.post("/book/new", (req, res) => {
+BookHUB.post("/book/new", (req, res) => {
     const { newBook } = req.body;
     database.books.push(newBook);
     return res.json({ books: database.books, message: "book was added" });
@@ -194,7 +194,7 @@ Access          PUBLIC
 Parameters      NONE
 Method          POST
 */
-prakhar.post("/author/new", (req, res) => {
+BookHUB.post("/author/new", (req, res) => {
     const { newAuthor } = req.body;
     database.authors.push(newAuthor);
     return res.json({ authors: database.authors, message: "author was added" });
@@ -207,7 +207,7 @@ Access          PUBLIC
 Parameters      NONE
 Method          POST
 */
-prakhar.post("/pub/new", (req, res) => {
+BookHUB.post("/pub/new", (req, res) => {
     const { newPublication } = req.body;
     database.publications.push(newPublication);
     return res.json({ authors: database.publications, message: "publication was added" });
@@ -222,7 +222,7 @@ Access          PUBLIC
 Parameters      isbn
 Method          PUT
 */
-prakhar.put("/books/update/:isbn", (req, res) => {
+BookHUB.put("/books/update/:isbn", (req, res) => {
     database.books.forEach((book) => {
         if (book.ISBN === req.params.isbn) {
             book.title = req.body.bookTitle;
@@ -240,7 +240,7 @@ Access          PUBLIC
 Parameters      isbn
 Method          PUT
 */
-prakhar.put("/books/author/update/:isbn", (req, res) => {
+BookHUB.put("/books/author/update/:isbn", (req, res) => {
     // update the book data base
     database.books.forEach((book) => {
         if (book.ISBN === req.params.isbn) {
@@ -264,7 +264,7 @@ Access          PUBLIC
 Parameters      id
 Method          PUT
 */
-prakhar.put("/author/update/:id", (req, res) => {
+BookHUB.put("/author/update/:id", (req, res) => {
     database.authors.forEach((author) => {
         if (author.id === parseInt(req.params.id)) {
             author.name = req.body.authorName;
@@ -282,7 +282,7 @@ Access          PUBLIC
 Parameters      isbn
 Method          PUT
 */
-prakhar.put("/pub/update/:isbn", (req, res) => {
+BookHUB.put("/pub/update/:isbn", (req, res) => {
     database.publications.forEach((publication) => {
         if (publication.books.includes(req.params.isbn)) {
             publication.name = req.body.publicationName;
@@ -290,7 +290,147 @@ prakhar.put("/pub/update/:isbn", (req, res) => {
         }
     });
 
-    return res.json({ publications: database.publications, 
-        message: "publication name updated" })
+    return res.json({
+        publications: database.publications,
+        message: "publication name updated"
+    })
 });
-prakhar.listen(3200, () => console.log("Server is Running"));
+
+/* 
+Route           /pub/update/book
+Description     update/add new book to the publication
+Access          PUBLIC
+Parameters      isbn
+Method          PUT
+*/
+
+BookHUB.put("/pub/update/book/:isbn", (req, res) => {
+    // update the publication database
+    database.publications.forEach((publication) => {
+        if (publication.id === req.body.pubId) {
+            return publication.books.push(req.params.isbn);
+        }
+    });
+
+    // update the book database
+    database.books.forEach((book) => {
+        if (book.ISBN === req.params.isbn) {
+            book.publication = req.body.pubId;
+            return;
+        }
+    });
+
+    return res.json({
+        books: database.books,
+        publications: database.publications,
+        message: "Successfully updated publication",
+    });
+});
+
+/* 
+Route           /book/delete
+Description     delete a book
+Access          PUBLIC
+Parameters      isbn
+Method          DELETE
+*/
+
+BookHUB.delete("/book/delete/:isbn", (req, res) => {
+    const updatedBookDatabase = database.books.filter((book) => book.ISBN !== req.params.isbn);
+
+    database.books = updatedBookDatabase;
+    return res.json({ books: database.books, message: "succesfully deleted the book" });
+});
+
+/* 
+Route           /book/delete/author
+Description     delete a author from a book
+Access          PUBLIC
+Parameters      isbn, authorid
+Method          DELETE
+*/
+
+BookHUB.delete("/book/delete/author/:isbn/:authorId", (req, res) => {
+
+    // update book database
+    database.books.forEach((book) => {
+        if (book.ISBN === req.params.isbn) {
+            const newAuthorList = book.authors.filter((author) => author !== parseInt(req.params.authorId));
+            book.authors = newAuthorList;
+            return;
+        }
+    });
+
+    // update the author database
+    database.authors.forEach((author) => {
+        if (author.id === parseInt(req.params.authorId)) {
+            const newBookList = author.books.filter((book) => book !== req.params.isbn);
+            author.books = newBookList;
+            return;
+        }
+    });
+    return res.json({ books: database.books, authors: database.authors, message: "author deleted from the book" });
+});
+
+/* 
+Route           /author/delete
+Description     delete an author
+Access          PUBLIC
+Parameters      authorid
+Method          DELETE
+*/
+
+// author from the book
+
+BookHUB.delete("/author/delete/:authorId", (req, res) => {
+    const newAuthorList = database.authors.filter((author) => author.id !== parseInt(req.params.authorId));
+    database.authors = newAuthorList;
+    return res.json({ authors: database.authors });
+});
+
+/* 
+Route           /pub/delete
+Description     delete an author
+Access          PUBLIC
+Parameters      pubid
+Method          DELETE
+*/
+
+BookHUB.delete("/pub/delete/:pubId", (req,res) => {
+    const newPublicationList = database.publications.filter((publication) => 
+    publication.id !== parseInt(req.params.pubId));
+    database.publications = newPublicationList;
+    return res.json({publications: database.publications});
+});
+
+/* 
+Route           /pub/delete/book
+Description     delete a book from publication
+Access          PUBLIC
+Parameters      isbn, pubid
+Method          DELETE
+*/
+
+BookHUB.delete("/pub/delete/book/:isbn/:pubId", (req,res) => {
+
+    // delete book from publication
+    database.publications.forEach((publication) => {
+        if (publication.id === parseInt(req.params.pubId)) {
+            const newBooksList = publication.books.filter((book) => book !== req.params.isbn);
+            publication.books = newBooksList;
+            return;
+        }
+    });
+
+    // delete publication from book
+    database.books.forEach((book) => {
+        if (book.ISBN === req.params.isbn) {
+            book.publication = 0;
+            return;
+        }
+    });
+    
+    return res.json({books: database.books, publications: database.publications});
+});
+
+BookHUB.listen(3200, () => console.log("Server is Running"));

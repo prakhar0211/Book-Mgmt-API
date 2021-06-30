@@ -28,12 +28,12 @@
 // New Book                                                     ✔      /book/new
 
 // PUT
-// update book details                                    ✔      /books/update/:isbn
-// update/add new author                                  ✔      /books/author/update/:isbn
+// update book details                                          ✔      /books/update/:isbn
+// update/add new author                                        ✔      /books/author/update/:isbn
 
 // delete
-// delete a book 
-// delete a author from a book
+// delete a book                                                ✔       /book/delete/:isbn
+// delete a author from a book                                  ✔      /book/delete/author/:isbn/:authorId
 
 
 // ----------------------------------------------------------------------------------------
@@ -73,8 +73,10 @@
 
 // PUT
 // updsate publication details                                  ✔      /pub/update/:isbn
-// update/add new book to the publication
+// update/add new book to the publication                       ✔      /pub/update/book/:isbn
 
 // DELETE
 // delete a book from publication
 // delete a publication
+
+// How does the Server serves the request
