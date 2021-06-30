@@ -1,4 +1,8 @@
+require("dotenv").config();
+
+// Frame work
 const express = require("express");
+const mongoose = require("mongoose");
 
 // database
 const database = require("./database/index");
@@ -8,6 +12,16 @@ const BookHUB = express();
 
 // configurations
 BookHUB.use(express.json());
+
+// Establish Database connection
+mongoose.connect(process.env.MONGO_URL, 
+{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+})
+.then(() => console.log("Connection Established!!!"));
 
 /* 
 Route           /
