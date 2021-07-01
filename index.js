@@ -397,9 +397,20 @@ Method          DELETE
 // author from the book
 
 BookHUB.delete("/author/delete/:authorId", (req, res) => {
+
+    // delete author from authors list
     const newAuthorList = database.authors.filter((author) => author.id !== parseInt(req.params.authorId));
     database.authors = newAuthorList;
-    return res.json({ authors: database.authors });
+
+    // delete author from a book
+    database.books.forEach((book) =>{
+    const newAuthors = book.authors.filter((authorlist) => 
+    authorlist !== parseInt(req.params.authorId));
+    book.authors = newAuthors;
+    return;
+});
+
+    return res.json({books: database.books, authors: database.authors });
 });
 
 /* 
