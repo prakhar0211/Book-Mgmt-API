@@ -8,6 +8,9 @@ const AuthorSchema = mongoose.Schema({
 });
 
 // create a author model
-const AuthorModel = mongoose.model(AuthorSchema);
+const AuthorModel = mongoose.model("Authors",AuthorSchema);
+// model is the document model of mongodb which is Authors here
+// if this document does not exist then mongo db will automatically create the document
+
 
 module.exports = AuthorModel;

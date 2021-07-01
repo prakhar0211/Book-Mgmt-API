@@ -8,6 +8,8 @@ const PublicationSchema = mongoose.Schema({
 });
 
 // create a publication model
-const PublicationModel = mongoose.model(PublicationSchema);
+const PublicationModel = mongoose.model("Publications",PublicationSchema);
+// model is the document model of mongodb which is Publications here
+// if this document does not exist then mongo db will automatically create the document
 
 module.exports = PublicationModel;
