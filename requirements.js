@@ -28,8 +28,8 @@
 // New Book                                                     ✔      /book/new
 
 // PUT
-// update book details                                          ✔      /books/update/:isbn
-// update/add new author                                        ✔      /books/author/update/:isbn
+// update book details                                          ✔      /book/update/:isbn
+// update/add new author                                        ✔      /book/author/update/:isbn
 
 // delete
 // delete a book                                                ✔       /book/delete/:isbn
